@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,6 +20,24 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
+   // --- Mini Neo motors (CANSparkMax) ---
+  private static final int kMotor1CANId = 1; // TODO : change to your CAN ID
+  private static final int kMotor2CANId = 2; // TODO : change to your CAN ID
+
+  private final SparkMax m_motor1 = new SparkMax(kMotor1CANId, MotorType.kBrushless);
+  private final SparkMax m_motor2 = new SparkMax(kMotor2CANId, MotorType.kBrushless);
+
+  @Override
+  public void robotInit() {
+      // TODO Auto-generated method stub
+      super.robotInit();
+
+      // TODO: Voir la documentation pour les détails comment configurer les moteurs Mini Neo
+      // https://codedocs.revrobotics.com/java/com/revrobotics/spark/sparkmax
+      m_motor2.setInverted(true);
+      m_motor2.follow(kMotor1CANId); // Makes motor2 follow motor1
+  }
+
   @Override
   public void autonomousPeriodic() {
     driveWithJoystick(false);
@@ -25,6 +46,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    // TODO : Faire quelque chose avec les moteurs Mini Neo quand on appuie sur un bouton
+
+    // TODO : Faire un graphique du courant des moteurs Mini Neo dans Shuffleboard
+    m_motor1.getOutputCurrent();
+    m_motor2.getOutputCurrent();
+
     driveWithJoystick(true);
   }
 
